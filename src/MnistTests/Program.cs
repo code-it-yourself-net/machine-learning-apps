@@ -70,7 +70,7 @@ internal class Program
         WriteLine($"xTest max: {xTest.Max()}");
 
         SimpleDataSource dataSource = new(xTrain, yTrain, xTest, yTest);
-        SeededRandom commonRandom = new(999);
+        SeededRandom commonRandom = new(241030);
 
         // RangeInitializer initializer = new(-1f, 1f);
         GlorotInitializer initializer = new(commonRandom);
@@ -93,7 +93,7 @@ internal class Program
         LearningRate learningRate = new ExponentialDecayLearningRate(0.19f, 0.05f);
         Trainer trainer = new(model, new StochasticGradientDescentMomentum(learningRate, 0.9f), random: commonRandom, logger: logger)
         {
-            Memo = "Testing different randoms"
+            Memo = "MATRIX no checkpoint 241030."
         };
 
         trainer.Fit(dataSource, EvalFunction, epochs: 10, evalEveryEpochs: 1, batchSize: 100);

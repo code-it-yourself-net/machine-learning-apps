@@ -2,6 +2,7 @@
 // File name: Program.cs
 // Code It Yourself with .NET, 2024
 
+using MachineLearning;
 using MachineLearning.NeuralNetwork;
 using MachineLearning.NeuralNetwork.DataSources;
 using MachineLearning.NeuralNetwork.Layers;

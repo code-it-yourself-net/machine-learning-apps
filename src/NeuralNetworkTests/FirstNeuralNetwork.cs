@@ -41,7 +41,7 @@ internal class FirstNeuralNetwork
         Trainer trainer = new(neuralNetwork, new StochasticGradientDescent(learningRate), ConsoleOutputMode.OnlyOnEval);
         trainer.Fit(dataSource, batchSize: 32, epochs: 10_000, evalEveryEpochs: 1_000);
 
-        Matrix[] @params = neuralNetwork.GetParams();
+        Matrix[] @params = neuralNetwork.GetAllParams();
         Matrix weights1 = @params[0];
         Matrix bias1 = @params[1];
         Matrix weights2 = @params[2];

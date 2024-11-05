@@ -32,7 +32,7 @@ internal class LinearRegression
         Trainer trainer = new(linearRegression, new StochasticGradientDescent(learningRate), ConsoleOutputMode.OnlyOnEval);
         trainer.Fit(dataSource, batchSize: 32, epochs: 1_500, evalEveryEpochs: 100);
 
-        Matrix[] @params = linearRegression.GetParams();
+        Matrix[] @params = linearRegression.GetAllParams();
         Matrix weights = @params[0];
         Matrix bias = @params[1];
         float loss = linearRegression.LastLoss;
