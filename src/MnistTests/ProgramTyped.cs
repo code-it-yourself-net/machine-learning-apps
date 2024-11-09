@@ -31,8 +31,8 @@ class MnistNeuralNetwork(SeededRandom? random)
     {
         // RangeInitializer initializer = new(-1f, 1f);
         GlorotInitializer initializer = new(Random);
-        Dropout? dropout1 = new(0.85f, Random);
-        Dropout? dropout2 = new(0.85f, Random);
+        Dropout2D? dropout1 = new(0.85f, Random);
+        Dropout2D? dropout2 = new(0.85f, Random);
 
         return builder
             .AddLayer(new DenseLayer(178, new Tanh(), initializer, dropout1))
