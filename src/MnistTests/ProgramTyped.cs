@@ -93,7 +93,7 @@ internal class ProgramTyped
 
         SimpleDataSource<float[,], float[,]> dataSource = new(xTrain, yTrain, xTest, yTest);
 
-        SeededRandom commonRandom = new(241030);
+        SeededRandom commonRandom = new(24111017);
 
         // Declare the network.
         MnistNeuralNetwork model = new(commonRandom);
@@ -103,10 +103,10 @@ internal class ProgramTyped
         LearningRate learningRate = new ExponentialDecayLearningRate(0.19f, 0.05f);
         Trainer2D trainer = new(model, new StochasticGradientDescentMomentum(learningRate, 0.9f), random: commonRandom, logger: logger)
         {
-            Memo = "TYPED batch=200 241030."
+            Memo = "TYPED batch=200 seed=24111017 epochs=20."
         };
 
-        trainer.Fit(dataSource, EvalFunction, epochs: 10, evalEveryEpochs: 1, batchSize: 200);
+        trainer.Fit(dataSource, EvalFunction, epochs: 90, evalEveryEpochs: 10, logEveryEpochs: 2, batchSize: 200);
 
         ReadLine();
     }
