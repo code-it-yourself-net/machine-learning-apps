@@ -2,12 +2,25 @@
 // File name: ProgramConv2D.cs
 // Code It Yourself with .NET, 2024
 
+using System.Diagnostics;
+
 using MachineLearning;
+using MachineLearning.NeuralNetwork.LearningRates;
+using MachineLearning.Typed;
 using MachineLearning.Typed.NeuralNetwork;
+using MachineLearning.Typed.NeuralNetwork.DataSources;
 using MachineLearning.Typed.NeuralNetwork.Layers;
 using MachineLearning.Typed.NeuralNetwork.Losses;
 using MachineLearning.Typed.NeuralNetwork.Operations;
+using MachineLearning.Typed.NeuralNetwork.Optimizers;
 using MachineLearning.Typed.NeuralNetwork.ParamInitializers;
+
+using Microsoft.Extensions.Logging;
+
+using Serilog;
+
+using static System.Console;
+using static MachineLearning.Typed.ArrayUtils;
 
 namespace MnistTests;
 
@@ -37,6 +50,125 @@ internal class ProgramConv2D
 {
     private static void Main(string[] args)
     {
+        // Create ILogger using Serilog
+        Serilog.Core.Logger serilog = new LoggerConfiguration()
+            .WriteTo.File("..\\..\\..\\Logs\\log-.txt", rollingInterval: RollingInterval.Day)
+            .CreateLogger();
 
+        Log.Logger = serilog;
+        Log.Information("Logging started...");
+
+        // Create a LoggerFactory and add Serilog
+        ILoggerFactory loggerFactory = new LoggerFactory()
+            .AddSerilog(serilog);
+
+        ILogger<Trainer4D> logger = loggerFactory.CreateLogger<Trainer4D>();
+
+        // rows - batch
+        // cols - features
+        float[,] train = LoadCsv(".\\Data\\mnist_train_small.csv");
+        float[,] test = LoadCsv(".\\Data\\mnist_test.csv");
+
+        (float[,,,] xTrain, float[,] yTrain) = Split(train);
+        (float[,,,] xTest, float[,] yTest) = Split(test);
+
+        // Scale xTrain and xTest to mean 0, variance 1
+        WriteLine("Scale data to mean 0...");
+
+        float mean = xTrain.Mean();
+        xTrain.AddInPlace(-mean);
+        xTest.AddInPlace(-mean);
+
+        WriteLine($"xTrain min: {xTrain.Min()}");
+        WriteLine($"xTest min: {xTest.Min()}");
+        WriteLine($"xTrain max: {xTrain.Max()}");
+        WriteLine($"xTest max: {xTest.Max()}");
+
+        WriteLine("\nScale data to variance 1...");
+
+        float std = xTrain.Std();
+        xTrain.DivideInPlace(std);
+        xTest.DivideInPlace(std);
+
+        WriteLine($"xTrain min: {xTrain.Min()}");
+        WriteLine($"xTest min: {xTest.Min()}");
+        WriteLine($"xTrain max: {xTrain.Max()}");
+        WriteLine($"xTest max: {xTest.Max()}");
+
+        SimpleDataSource<float[,,,], float[,]> dataSource = new(xTrain, yTrain, xTest, yTest);
+
+        SeededRandom commonRandom = new(241030);
+
+        // Declare the network.
+        MnistConvNeuralNetwork model = new(commonRandom);
+
+        WriteLine("\nStart training...\n");
+
+        LearningRate learningRate = new ExponentialDecayLearningRate(0.19f, 0.05f);
+        Trainer4D trainer = new(model, new StochasticGradientDescentMomentum(learningRate, 0.9f), random: commonRandom, logger: logger)
+        {
+            Memo = "Convolution2D 241030."
+        };
+
+        trainer.Fit(dataSource, EvalFunction, epochs: 10, evalEveryEpochs: 1, batchSize: 200);
+
+        ReadLine();
+    }
+
+    private static float EvalFunction(NeuralNetwork<float[,,,], float[,]> neuralNetwork, float[,,,] xEvalTest, float[,] yEvalTest)
+    {
+        // 'prediction' is a one-hot table with the predicted digit.
+        float[,] prediction = neuralNetwork.Forward(xEvalTest, true);
+        int[] predictionArgmax = prediction.Argmax();
+
+        int rows = predictionArgmax.GetLength(0);
+
+#if DEBUG
+        if (rows != yEvalTest.GetLength((int)Dimension.Rows))
+        {
+            throw new ArgumentException("Number of samples in prediction and yEvalTest do not match.");
+        }
+#endif
+
+        int hits = 0;
+        for (int row = 0; row < rows; row++)
+        {
+            int predictedDigit = predictionArgmax[row];
+            if (yEvalTest[row, predictedDigit] == 1f)
+                hits++;
+        }
+
+        float accuracy = (float)hits / rows;
+        return accuracy;
+    }
+
+    private static (float[,,,] xTest, float[,] yTest) Split(float[,] source)
+    {
+        // Split into xTest (all columns except the first one) and yTest (a one-hot table from the first column with values from 0 to 9).
+
+        float[,] xTest2D = source.GetColumns(1..source.GetLength((int)Dimension.Columns));
+        float[,] yTest = source.GetColumn(0);
+
+        Debug.Assert(xTest2D.GetLength(1) == 28 * 28);
+
+        // Convert yTest to a one-hot table.
+        float[,] oneHot = new float[yTest.GetLength((int)Dimension.Rows), 10];
+        for (int row = 0; row < yTest.GetLength((int)Dimension.Rows); row++)
+        {
+            int value = Convert.ToInt32(yTest[row, 0]);
+            oneHot[row, value] = 1f;
+        }
+
+        float[,,,] xTest4D = new float[xTest2D.GetLength(0), 1, 28, 28];
+
+        for (int row = 0; row < xTest2D.GetLength(0); row++)
+        {
+            for (int col = 0; col < xTest2D.GetLength(1); col++)
+            {
+                xTest4D[row, 0, col / 28, col % 28] = xTest2D[row, col];
+            }
+        }
+
+        return (xTest4D, oneHot);
     }
 }
