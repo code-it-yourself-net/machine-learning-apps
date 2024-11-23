@@ -11,6 +11,7 @@ using MachineLearning.Typed.NeuralNetwork.Layers;
 using MachineLearning.Typed.NeuralNetwork.Losses;
 using MachineLearning.Typed.NeuralNetwork.Operations;
 using MachineLearning.Typed.NeuralNetwork.Optimizers;
+using MachineLearning.Typed;
 
 using static MachineLearning.Typed.ArrayUtils;
 
@@ -18,7 +19,8 @@ using static MachineLearning.Typed.ArrayUtils;
 // 3 (none, vertical, and horizontal stripes) * 4 examples * 1 channel * 3 rows * 3 columns
 
 const int inputChannels = 1;
-const int examples = 12;
+const int examples = 15;
+const int outputCategories = 3; // 0, 1, 2
 
 float[,,,] xTrain = new float[examples, inputChannels, 3, 3]
 {
@@ -51,6 +53,13 @@ float[,,,] xTrain = new float[examples, inputChannels, 3, 3]
             { 0, 1, 0 },
         }
     },
+    {
+        {
+            { 1, 0, 0 },
+            { 0, 1, 0 },
+            { 0, 0, 1 },
+        }
+    },
     // horizontal
     {
         {
@@ -76,6 +85,13 @@ float[,,,] xTrain = new float[examples, inputChannels, 3, 3]
     {
         {
             { 0, 0, 0 },
+            { 1, 1, 1 },
+            { 0, 0, 0 },
+        }
+    },
+    {
+        {
+            { 1, 1, 1 },
             { 1, 1, 1 },
             { 0, 0, 0 },
         }
@@ -108,11 +124,19 @@ float[,,,] xTrain = new float[examples, inputChannels, 3, 3]
             { 0, 0, 1 },
             { 0, 0, 1 },
         }
+    },
+    {
+        {
+            { 0, 1, 1 },
+            { 0, 1, 1 },
+            { 0, 1, 1 },
+        }
     }
 };
 
 // Values - 0 for unknown, 1 for horizontal stripes, 2 for vertical stripes
-float[,] oneHot = new float[examples, 3] {
+float[,] oneHot = new float[examples, outputCategories] {
+    { 1, 0, 0 },
     { 1, 0, 0 },
     { 1, 0, 0 },
     { 1, 0, 0 },
@@ -121,13 +145,15 @@ float[,] oneHot = new float[examples, 3] {
     { 0, 1, 0 },
     { 0, 1, 0 },
     { 0, 1, 0 },
+    { 0, 1, 0 },
+    { 0, 0, 1 },
     { 0, 0, 1 },
     { 0, 0, 1 },
     { 0, 0, 1 },
     { 0, 0, 1 },
 };
 
-float loss = Train(xTrain, oneHot, 100);
+float loss = Train(xTrain, oneHot, 1_000, 241123);
 
 Console.WriteLine($"loss: {loss}");
 Console.ReadLine();
@@ -141,16 +167,16 @@ static float Train(float[,,,] xTrain, float[,] yTrain, int iterations = 2_000 /*
     else
         random = new();
 
-    const int outputChannels = 2;
+    const int outputChannels = 16;
     float[,,,] kernels = CreateRandom(inputChannels, outputChannels, 3, 3, random);
     Conv2D conv2D = new(kernels);
     Tanh4D tanh4D = new();
     Flatten flatten = new();
 
-    float[,] weights = CreateRandom(outputChannels * 3 * 3, 10, random);
+    float[,] weights = CreateRandom(outputChannels * 3 * 3, outputCategories, random);
     WeightMultiply weightMultiply = new(weights);
 
-    float[] bias = CreateRandom(10, random);
+    float[] bias = CreateRandom(outputCategories, random);
     BiasAdd biasAdd = new(bias);
 
     SoftmaxCrossEntropyLoss softmaxCrossEntropyLoss = new();
@@ -177,6 +203,20 @@ static float Train(float[,,,] xTrain, float[,] yTrain, int iterations = 2_000 /*
         if (i % 10 == 0)
         {
             Console.WriteLine($"iteration: {i}, loss: {loss}");
+
+            // Write the percent of the correct predictions
+            float[,] prediction = softmaxCrossEntropyLoss.Prediction;
+            int[] predictionArgmax = prediction.Argmax();
+            int rows = predictionArgmax.GetLength(0);
+            int hits = 0;
+            for (int row = 0; row < rows; row++)
+            {
+                int predictedDigit = predictionArgmax[row];
+                if (yTrain[row, predictedDigit] == 1f)
+                    hits++;
+            }
+            float accuracy = (float)hits / rows;
+            Console.WriteLine($"accuracy: {accuracy}");
         }
 
         // Backward
