@@ -152,18 +152,21 @@ internal class ProgramConv2D
         Debug.Assert(xTest2D.GetLength(1) == 28 * 28);
 
         // Convert yTest to a one-hot table.
-        float[,] oneHot = new float[yTest.GetLength((int)Dimension.Rows), 10];
-        for (int row = 0; row < yTest.GetLength((int)Dimension.Rows); row++)
+        int yTestRows = yTest.GetLength((int)Dimension.Rows);
+        float[,] oneHot = new float[yTestRows, 10];
+        for (int row = 0; row < yTestRows; row++)
         {
             int value = Convert.ToInt32(yTest[row, 0]);
             oneHot[row, value] = 1f;
         }
 
-        float[,,,] xTest4D = new float[xTest2D.GetLength(0), 1, 28, 28];
+        int xTestRows = xTest2D.GetLength((int)Dimension.Rows);
+        int xTestCols = xTest2D.GetLength((int)Dimension.Columns);
+        float[,,,] xTest4D = new float[xTestRows, 1, 28, 28];
 
-        for (int row = 0; row < xTest2D.GetLength(0); row++)
+        for (int row = 0; row < xTestRows; row++)
         {
-            for (int col = 0; col < xTest2D.GetLength(1); col++)
+            for (int col = 0; col < xTestCols; col++)
             {
                 xTest4D[row, 0, col / 28, col % 28] = xTest2D[row, col];
             }

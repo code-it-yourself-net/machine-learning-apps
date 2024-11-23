@@ -5,7 +5,7 @@
     <TargetFramework>net8.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
-    <StartupObject>MnistTests.ProgramTyped</StartupObject>
+    <StartupObject>MnistTests.ProgramConv2D</StartupObject>
   </PropertyGroup>
 
   <ItemGroup>
