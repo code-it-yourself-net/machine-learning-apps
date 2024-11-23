@@ -105,7 +105,9 @@ internal class ProgramConv2D
         WriteLine("\nStart training...\n");
 
         LearningRate learningRate = new ExponentialDecayLearningRate(0.19f, 0.05f);
-        Trainer4D trainer = new(model, new StochasticGradientDescentMomentum(learningRate, 0.9f), random: commonRandom, logger: logger)
+        // Optimizer optimizer = new StochasticGradientDescentMomentum(learningRate, 0.9f);
+        Optimizer optimizer = new StochasticGradientDescent(learningRate);
+        Trainer4D trainer = new(model, optimizer, random: commonRandom, logger: logger)
         {
             Memo = "Convolution2D 241030."
         };
