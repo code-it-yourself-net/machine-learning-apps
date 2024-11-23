@@ -25,21 +25,21 @@ using static MachineLearning.Typed.ArrayUtils;
 namespace MnistTests;
 
 internal class MnistConvNeuralNetwork(SeededRandom? random)
-    : NeuralNetwork<float[,,,], float[,]>(new SoftmaxCrossEntropyLoss(), random)
+    : NeuralNetwork<float[,,,], float[,]>(new SoftmaxLogSumExpCrossEntropyLoss(), random)
 {
     protected override LayerBuilder<float[,]> OnAddLayers(LayerBuilder<float[,,,]> builder)
     {
-        // ParamInitializer initializer = new GlorotInitializer(Random);
-        ParamInitializer initializer = new RangeInitializer(1, 1);
+        ParamInitializer initializer = new GlorotInitializer(Random);
+        // ParamInitializer initializer = new RangeInitializer(1, 1);
         Dropout4D? dropout = new(0.85f, Random);
 
         return builder
             .AddLayer(new Conv2DLayer(
-                filters: 16,
+                filters: 3, // 16,
                 kernelSize: 3,
                 activationFunction: new Tanh4D(),
-                paramInitializer: initializer,
-                dropout: dropout
+                paramInitializer: initializer
+                //dropout: dropout
             ))
             .AddLayer(new FlattenLayer())
             .AddLayer(new DenseLayer(10, new Linear(), initializer));

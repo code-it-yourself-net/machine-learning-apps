@@ -2,24 +2,19 @@
 // File name: Program.cs
 // Code It Yourself with .NET, 2024
 
-using System.Diagnostics;
-using System.Threading.Channels;
-
-using MachineLearning;
 using MachineLearning.NeuralNetwork.LearningRates;
-using MachineLearning.Typed.NeuralNetwork.Layers;
+using MachineLearning.Typed;
 using MachineLearning.Typed.NeuralNetwork.Losses;
 using MachineLearning.Typed.NeuralNetwork.Operations;
 using MachineLearning.Typed.NeuralNetwork.Optimizers;
-using MachineLearning.Typed;
 
 using static MachineLearning.Typed.ArrayUtils;
 
 // Prepare data:
-// 3 (none, vertical, and horizontal stripes) * 4 examples * 1 channel * 3 rows * 3 columns
+// 3 (none, vertical, and horizontal stripes) * 10 examples * 1 channel * 3 rows * 3 columns
 
 const int inputChannels = 1;
-const int examples = 15;
+const int examples = 60;
 const int outputCategories = 3; // 0, 1, 2
 
 float[,,,] xTrain = new float[examples, inputChannels, 3, 3]
@@ -131,7 +126,340 @@ float[,,,] xTrain = new float[examples, inputChannels, 3, 3]
             { 0, 1, 1 },
             { 0, 1, 1 },
         }
-    }
+    },
+
+    // negative 
+
+    // neither vertical nor horizonta
+    {
+        {
+            { 0, 0, 0 },
+            { 0, -1, 0 },
+            { 0, 0, 0 }
+        }
+    },
+    {
+        {
+            { -1, -1, -1 },
+            { -1, -1, -1 },
+            { -1, -1, -1 }
+        }
+    },
+    {
+        {
+            { -1, 0, -1 },
+            { 0, -1, 0 },
+            { -1, 0, -1 }
+        }
+    },
+    {
+        {
+            { 0, -1, 0 },
+            { -1, -1, -1 },
+            { 0, -1, 0 },
+        }
+    },
+    {
+        {
+            { -1, 0, 0 },
+            { 0, -1, 0 },
+            { 0, 0, -1 },
+        }
+    },
+    // horizontal
+    {
+        {
+            { -1, -1, -1 },
+            { 0, 0, 0 },
+            { -1, -1, -1 }
+        }
+    },
+    {
+        {
+            { -1, -1, -1 },
+            { 0, 0, 0 },
+            { 0, 0, 0 }
+        }
+    },
+    {
+        {
+            { 0, 0, 0 },
+            { 0, 0, 0 },
+            { -1, -1, -1 }
+        }
+    },
+    {
+        {
+            { 0, 0, 0 },
+            { -1, -1, -1 },
+            { 0, 0, 0 },
+        }
+    },
+    {
+        {
+            { -1, -1, -1 },
+            { -1, -1, -1 },
+            { 0, 0, 0 },
+        }
+    },
+    // vertical
+    {
+        {
+            { -1, 0, -1 },
+            { -1, 0, -1 },
+            { -1, 0, -1 }
+        }
+    },
+    {
+        {
+            { 0, -1, 0 },
+            { 0, -1, 0 },
+            { 0, -1, 0 }
+        }
+    },
+    {
+        {
+            { -1, 0, 0 },
+            { -1, 0, 0 },
+            { -1, 0, 0 }
+        }
+    },
+    {
+        {
+            { 0, 0, -1 },
+            { 0, 0, -1 },
+            { 0, 0, -1 },
+        }
+    },
+    {
+        {
+            { 0, -1, -1 },
+            { 0, -1, -1 },
+            { 0, -1, -1 },
+        }
+    },
+
+    // 2
+
+    // neither vertical nor horizonta
+    {
+        {
+            { 0, 0, 0 },
+            { 0, 0, 0 },
+            { 0, 0, 0 }
+        }
+    },
+    {
+        {
+            { 2, 2, 2 },
+            { 2, 2, 2 },
+            { 2, 2, 2 }
+        }
+    },
+    {
+        {
+            { 2, 0, 2 },
+            { 0, 2, 0 },
+            { 2, 0, 2 }
+        }
+    },
+    {
+        {
+            { 0, 2, 0 },
+            { 2, 2, 2 },
+            { 0, 2, 0 },
+        }
+    },
+    {
+        {
+            { 2, 0, 0 },
+            { 0, 2, 0 },
+            { 0, 0, 2 },
+        }
+    },
+    // horizontal
+    {
+        {
+            { 2, 2, 2 },
+            { 0, 0, 0 },
+            { 2, 2, 2 }
+        }
+    },
+    {
+        {
+            { 2, 2, 2 },
+            { 0, 0, 0 },
+            { 0, 0, 0 }
+        }
+    },
+    {
+        {
+            { 0, 0, 0 },
+            { 0, 0, 0 },
+            { 2, 2, 2 }
+        }
+    },
+    {
+        {
+            { 0, 0, 0 },
+            { 2, 2, 2 },
+            { 0, 0, 0 },
+        }
+    },
+    {
+        {
+            { 2, 2, 2 },
+            { 2, 2, 2 },
+            { 0, 0, 0 },
+        }
+    },
+    // vertical
+    {
+        {
+            { 2, 0, 2 },
+            { 2, 0, 2 },
+            { 2, 0, 2 }
+        }
+    },
+    {
+        {
+            { 0, 2, 0 },
+            { 0, 2, 0 },
+            { 0, 2, 0 }
+        }
+    },
+    {
+        {
+            { 2, 0, 0 },
+            { 2, 0, 0 },
+            { 2, 0, 0 }
+        }
+    },
+    {
+        {
+            { 0, 0, 2 },
+            { 0, 0, 2 },
+            { 0, 0, 2 },
+        }
+    },
+    {
+        {
+            { 0, 2, 2 },
+            { 0, 2, 2 },
+            { 0, 2, 2 },
+        }
+    },
+
+    // negative 
+
+    // neither vertical nor horizonta
+    {
+        {
+            { 0, 0, 0 },
+            { 0, -2, 0 },
+            { 0, 0, 0 }
+        }
+    },
+    {
+        {
+            { -2, -2, -2 },
+            { -2, -2, -2 },
+            { -2, -2, -2 }
+        }
+    },
+    {
+        {
+            { -2, 0, -2 },
+            { 0, -2, 0 },
+            { -2, 0, -2 }
+        }
+    },
+    {
+        {
+            { 0, -2, 0 },
+            { -2, -2, -2 },
+            { 0, -2, 0 },
+        }
+    },
+    {
+        {
+            { -2, 0, 0 },
+            { 0, -2, 0 },
+            { 0, 0, -2 },
+        }
+    },
+    // horizontal
+    {
+        {
+            { -2, -2, -2 },
+            { 0, 0, 0 },
+            { -2, -2, -2 }
+        }
+    },
+    {
+        {
+            { -2, -2, -2 },
+            { 0, 0, 0 },
+            { 0, 0, 0 }
+        }
+    },
+    {
+        {
+            { 0, 0, 0 },
+            { 0, 0, 0 },
+            { -2, -2, -2 }
+        }
+    },
+    {
+        {
+            { 0, 0, 0 },
+            { -2, -2, -2 },
+            { 0, 0, 0 },
+        }
+    },
+    {
+        {
+            { -2, -2, -2 },
+            { -2, -2, -2 },
+            { 0, 0, 0 },
+        }
+    },
+    // vertical
+    {
+        {
+            { -2, 0, -2 },
+            { -2, 0, -2 },
+            { -2, 0, -2 }
+        }
+    },
+    {
+        {
+            { 0, -2, 0 },
+            { 0, -2, 0 },
+            { 0, -2, 0 }
+        }
+    },
+    {
+        {
+            { -2, 0, 0 },
+            { -2, 0, 0 },
+            { -2, 0, 0 }
+        }
+    },
+    {
+        {
+            { 0, 0, -2 },
+            { 0, 0, -2 },
+            { 0, 0, -2 },
+        }
+    },
+    {
+        {
+            { 0, -2, -2 },
+            { 0, -2, -2 },
+            { 0, -2, -2 },
+        }
+    },
 };
 
 // Values - 0 for unknown, 1 for horizontal stripes, 2 for vertical stripes
@@ -151,9 +479,57 @@ float[,] oneHot = new float[examples, outputCategories] {
     { 0, 0, 1 },
     { 0, 0, 1 },
     { 0, 0, 1 },
+    // negative
+    { 1, 0, 0 },
+    { 1, 0, 0 },
+    { 1, 0, 0 },
+    { 1, 0, 0 },
+    { 1, 0, 0 },
+    { 0, 1, 0 },
+    { 0, 1, 0 },
+    { 0, 1, 0 },
+    { 0, 1, 0 },
+    { 0, 1, 0 },
+    { 0, 0, 1 },
+    { 0, 0, 1 },
+    { 0, 0, 1 },
+    { 0, 0, 1 },
+    { 0, 0, 1 },
+    // 2
+    { 1, 0, 0 },
+    { 1, 0, 0 },
+    { 1, 0, 0 },
+    { 1, 0, 0 },
+    { 1, 0, 0 },
+    { 0, 1, 0 },
+    { 0, 1, 0 },
+    { 0, 1, 0 },
+    { 0, 1, 0 },
+    { 0, 1, 0 },
+    { 0, 0, 1 },
+    { 0, 0, 1 },
+    { 0, 0, 1 },
+    { 0, 0, 1 },
+    { 0, 0, 1 },
+    // negative
+    { 1, 0, 0 },
+    { 1, 0, 0 },
+    { 1, 0, 0 },
+    { 1, 0, 0 },
+    { 1, 0, 0 },
+    { 0, 1, 0 },
+    { 0, 1, 0 },
+    { 0, 1, 0 },
+    { 0, 1, 0 },
+    { 0, 1, 0 },
+    { 0, 0, 1 },
+    { 0, 0, 1 },
+    { 0, 0, 1 },
+    { 0, 0, 1 },
+    { 0, 0, 1 },
 };
 
-float loss = Train(xTrain, oneHot, 1_000, 241123);
+float loss = Train(xTrain, oneHot, 1_000, 1241123);
 
 Console.WriteLine($"loss: {loss}");
 Console.ReadLine();
@@ -167,7 +543,7 @@ static float Train(float[,,,] xTrain, float[,] yTrain, int iterations = 2_000 /*
     else
         random = new();
 
-    const int outputChannels = 16;
+    const int outputChannels = 4;
     float[,,,] kernels = CreateRandom(inputChannels, outputChannels, 3, 3, random);
     Conv2D conv2D = new(kernels);
     Tanh4D tanh4D = new();
@@ -198,7 +574,7 @@ static float Train(float[,,,] xTrain, float[,] yTrain, int iterations = 2_000 /*
 
         loss = softmaxCrossEntropyLoss.Forward(biasAddOutput, yTrain);
 
-        // Print loss every 10 steps
+        // Print the loss every 10 steps
 
         if (i % 10 == 0)
         {
@@ -217,6 +593,8 @@ static float Train(float[,,,] xTrain, float[,] yTrain, int iterations = 2_000 /*
             }
             float accuracy = (float)hits / rows;
             Console.WriteLine($"accuracy: {accuracy}");
+
+            // TODO: display conv2D.Param to see the changes in the kernels
         }
 
         // Backward
