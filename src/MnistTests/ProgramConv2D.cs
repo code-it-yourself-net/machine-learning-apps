@@ -29,7 +29,8 @@ internal class MnistConvNeuralNetwork(SeededRandom? random)
 {
     protected override LayerBuilder<float[,]> OnAddLayers(LayerBuilder<float[,,,]> builder)
     {
-        GlorotInitializer initializer = new(Random);
+        // ParamInitializer initializer = new GlorotInitializer(Random);
+        ParamInitializer initializer = new RangeInitializer(1, 1);
         Dropout4D? dropout = new(0.85f, Random);
 
         return builder
@@ -102,17 +103,17 @@ internal class ProgramConv2D
         // Declare the network.
         MnistConvNeuralNetwork model = new(commonRandom);
 
-        WriteLine("\nStart training...\n");
+        WriteLine("\nStart training (Convolution2D)...\n");
 
         LearningRate learningRate = new ExponentialDecayLearningRate(0.19f, 0.05f);
         // Optimizer optimizer = new StochasticGradientDescentMomentum(learningRate, 0.9f);
         Optimizer optimizer = new StochasticGradientDescent(learningRate);
         Trainer4D trainer = new(model, optimizer, random: commonRandom, logger: logger)
         {
-            Memo = "Convolution2D 241030."
+            Memo = "Convolution2D 241123."
         };
 
-        trainer.Fit(dataSource, EvalFunction, epochs: 10, evalEveryEpochs: 1, batchSize: 200);
+        trainer.Fit(dataSource, EvalFunction, epochs: 1, evalEveryEpochs: 1, batchSize: 200);
 
         ReadLine();
     }

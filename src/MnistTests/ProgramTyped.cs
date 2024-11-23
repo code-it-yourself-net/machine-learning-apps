@@ -35,8 +35,8 @@ class MnistNeuralNetwork(SeededRandom? random)
         Dropout2D? dropout2 = new(0.85f, Random);
 
         return builder
-            .AddLayer(new DenseLayer(178, new Tanh(), initializer, dropout1))
-            .AddLayer(new DenseLayer(46, new Tanh(), initializer, dropout2))
+            .AddLayer(new DenseLayer(178, new Tanh2D(), initializer, dropout1))
+            .AddLayer(new DenseLayer(46, new Tanh2D(), initializer, dropout2))
             .AddLayer(new DenseLayer(10, new Linear(), initializer));
     }
 
