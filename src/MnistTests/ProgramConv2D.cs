@@ -1,8 +1,8 @@
 ﻿// Machine Learning
-// File name: ProgramTyped.cs
+// File name: ProgramConv2D.cs
 // Code It Yourself with .NET, 2024
 
-// MNIST - Modified National Institute of Standards and Technology database
+using System.Diagnostics;
 
 using MachineLearning;
 using MachineLearning.NeuralNetwork.LearningRates;
@@ -24,25 +24,29 @@ using static MachineLearning.Typed.ArrayUtils;
 
 namespace MnistTests;
 
-class MnistNeuralNetwork(SeededRandom? random) 
-    : NeuralNetwork<float[,], float[,]>(new SoftmaxCrossEntropyLoss(), random)
+internal class MnistConvNeuralNetwork(SeededRandom? random)
+    : NeuralNetwork<float[,,,], float[,]>(new SoftmaxCrossEntropyLoss(), random)
 {
-    protected override LayerBuilder<float[,]> OnAddLayers(LayerBuilder<float[,]> builder)
+    protected override LayerBuilder<float[,]> OnAddLayers(LayerBuilder<float[,,,]> builder)
     {
-        // RangeInitializer initializer = new(-1f, 1f);
         GlorotInitializer initializer = new(Random);
-        Dropout2D? dropout1 = new(0.85f, Random);
-        Dropout2D? dropout2 = new(0.85f, Random);
+        Dropout4D? dropout = new(0.85f, Random);
 
         return builder
-            .AddLayer(new DenseLayer(178, new Tanh(), initializer, dropout1))
-            .AddLayer(new DenseLayer(46, new Tanh(), initializer, dropout2))
+            .AddLayer(new Conv2DLayer(
+                filters: 16,
+                kernelSize: 3,
+                activationFunction: new Tanh4D(),
+                paramInitializer: initializer,
+                dropout: dropout
+            ))
+            .AddLayer(new FlattenLayer())
             .AddLayer(new DenseLayer(10, new Linear(), initializer));
     }
 
 }
 
-internal class ProgramTyped
+internal class ProgramConv2D
 {
     private static void Main(string[] args)
     {
@@ -58,15 +62,15 @@ internal class ProgramTyped
         ILoggerFactory loggerFactory = new LoggerFactory()
             .AddSerilog(serilog);
 
-        ILogger<Trainer2D> logger = loggerFactory.CreateLogger<Trainer2D>();
+        ILogger<Trainer4D> logger = loggerFactory.CreateLogger<Trainer4D>();
 
         // rows - batch
         // cols - features
         float[,] train = LoadCsv(".\\Data\\mnist_train_small.csv");
         float[,] test = LoadCsv(".\\Data\\mnist_test.csv");
 
-        (float[,] xTrain, float[,] yTrain) = Split(train);
-        (float[,] xTest, float[,] yTest) = Split(test);
+        (float[,,,] xTrain, float[,] yTrain) = Split(train);
+        (float[,,,] xTest, float[,] yTest) = Split(test);
 
         // Scale xTrain and xTest to mean 0, variance 1
         WriteLine("Scale data to mean 0...");
@@ -91,27 +95,27 @@ internal class ProgramTyped
         WriteLine($"xTrain max: {xTrain.Max()}");
         WriteLine($"xTest max: {xTest.Max()}");
 
-        SimpleDataSource<float[,], float[,]> dataSource = new(xTrain, yTrain, xTest, yTest);
+        SimpleDataSource<float[,,,], float[,]> dataSource = new(xTrain, yTrain, xTest, yTest);
 
-        SeededRandom commonRandom = new(24111017);
+        SeededRandom commonRandom = new(241030);
 
         // Declare the network.
-        MnistNeuralNetwork model = new(commonRandom);
+        MnistConvNeuralNetwork model = new(commonRandom);
 
         WriteLine("\nStart training...\n");
 
         LearningRate learningRate = new ExponentialDecayLearningRate(0.19f, 0.05f);
-        Trainer2D trainer = new(model, new StochasticGradientDescentMomentum(learningRate, 0.9f), random: commonRandom, logger: logger)
+        Trainer4D trainer = new(model, new StochasticGradientDescentMomentum(learningRate, 0.9f), random: commonRandom, logger: logger)
         {
-            Memo = "TYPED batch=200 seed=24111017 epochs=20."
+            Memo = "Convolution2D 241030."
         };
 
-        trainer.Fit(dataSource, EvalFunction, epochs: 1, evalEveryEpochs: 10, logEveryEpochs: 2, batchSize: 200);
+        trainer.Fit(dataSource, EvalFunction, epochs: 10, evalEveryEpochs: 1, batchSize: 200);
 
         ReadLine();
     }
 
-    private static float EvalFunction(NeuralNetwork<float[,], float[,]> neuralNetwork, float[,] xEvalTest, float[,] yEvalTest)
+    private static float EvalFunction(NeuralNetwork<float[,,,], float[,]> neuralNetwork, float[,,,] xEvalTest, float[,] yEvalTest)
     {
         // 'prediction' is a one-hot table with the predicted digit.
         float[,] prediction = neuralNetwork.Forward(xEvalTest, true);
@@ -138,12 +142,14 @@ internal class ProgramTyped
         return accuracy;
     }
 
-    private static (float[,] xTest, float[,] yTest) Split(float[,] source)
+    private static (float[,,,] xTest, float[,] yTest) Split(float[,] source)
     {
         // Split into xTest (all columns except the first one) and yTest (a one-hot table from the first column with values from 0 to 9).
 
-        float[,] xTest = source.GetColumns(1..source.GetLength((int)Dimension.Columns));
+        float[,] xTest2D = source.GetColumns(1..source.GetLength((int)Dimension.Columns));
         float[,] yTest = source.GetColumn(0);
+
+        Debug.Assert(xTest2D.GetLength(1) == 28 * 28);
 
         // Convert yTest to a one-hot table.
         float[,] oneHot = new float[yTest.GetLength((int)Dimension.Rows), 10];
@@ -153,6 +159,16 @@ internal class ProgramTyped
             oneHot[row, value] = 1f;
         }
 
-        return (xTest, oneHot);
+        float[,,,] xTest4D = new float[xTest2D.GetLength(0), 1, 28, 28];
+
+        for (int row = 0; row < xTest2D.GetLength(0); row++)
+        {
+            for (int col = 0; col < xTest2D.GetLength(1); col++)
+            {
+                xTest4D[row, 0, col / 28, col % 28] = xTest2D[row, col];
+            }
+        }
+
+        return (xTest4D, oneHot);
     }
 }
