@@ -29,12 +29,13 @@ internal class MnistConvNeuralNetwork(SeededRandom? random)
 {
     protected override LayerBuilder<float[,]> OnAddLayers(LayerBuilder<float[,,,]> builder)
     {
-        GlorotInitializer initializer = new(Random);
+        ParamInitializer initializer = new GlorotInitializer(Random);
+        // ParamInitializer initializer = new RangeInitializer(1, 1);
         Dropout4D? dropout = new(0.85f, Random);
 
         return builder
             .AddLayer(new Conv2DLayer(
-                filters: 16,
+                filters: 32, // 16,
                 kernelSize: 3,
                 activationFunction: new Tanh4D(),
                 paramInitializer: initializer,
@@ -102,15 +103,17 @@ internal class ProgramConv2D
         // Declare the network.
         MnistConvNeuralNetwork model = new(commonRandom);
 
-        WriteLine("\nStart training...\n");
+        WriteLine("\nStart training (Convolution2D)...\n");
 
-        LearningRate learningRate = new ExponentialDecayLearningRate(0.19f, 0.05f);
-        Trainer4D trainer = new(model, new StochasticGradientDescentMomentum(learningRate, 0.9f), random: commonRandom, logger: logger)
+        LearningRate learningRate = new ExponentialDecayLearningRate(0.01f, 0.001f);
+        Optimizer optimizer = new StochasticGradientDescentMomentum(learningRate, 0.9f);
+        //Optimizer optimizer = new StochasticGradientDescent(learningRate);
+        Trainer4D trainer = new(model, optimizer, random: commonRandom, logger: logger)
         {
-            Memo = "Convolution2D 241030."
+            Memo = "Convolution2D 241123."
         };
 
-        trainer.Fit(dataSource, EvalFunction, epochs: 10, evalEveryEpochs: 1, batchSize: 200);
+        trainer.Fit(dataSource, EvalFunction, epochs: 3, evalEveryEpochs: 1, batchSize: 200);
 
         ReadLine();
     }
@@ -152,19 +155,24 @@ internal class ProgramConv2D
         Debug.Assert(xTest2D.GetLength(1) == 28 * 28);
 
         // Convert yTest to a one-hot table.
-        float[,] oneHot = new float[yTest.GetLength((int)Dimension.Rows), 10];
-        for (int row = 0; row < yTest.GetLength((int)Dimension.Rows); row++)
+        int yTestRows = yTest.GetLength((int)Dimension.Rows);
+        float[,] oneHot = new float[yTestRows, 10];
+        for (int row = 0; row < yTestRows; row++)
         {
             int value = Convert.ToInt32(yTest[row, 0]);
             oneHot[row, value] = 1f;
         }
 
-        float[,,,] xTest4D = new float[xTest2D.GetLength(0), 1, 28, 28];
+        int xTestRows = xTest2D.GetLength((int)Dimension.Rows);
+        int xTestCols = xTest2D.GetLength((int)Dimension.Columns);
+        float[,,,] xTest4D = new float[xTestRows, 1, 28, 28];
 
-        for (int row = 0; row < xTest2D.GetLength(0); row++)
+        for (int row = 0; row < xTestRows; row++)
         {
-            for (int col = 0; col < xTest2D.GetLength(1); col++)
+            for (int col = 0; col < xTestCols; col++)
             {
+                //int x = col % 28;
+                //int y = col / 28;
                 xTest4D[row, 0, col / 28, col % 28] = xTest2D[row, col];
             }
         }

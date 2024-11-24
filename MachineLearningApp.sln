@@ -21,7 +21,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NeuralNetworkTests", "src\N
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MnistTests", "src\MnistTests\MnistTests.csproj", "{75FB1A0D-8F9E-459D-9D5F-687BC2B773D4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LoggerTest", "src\LoggerTest\LoggerTest.csproj", "{49821876-8EEB-4B45-A823-7DA8B22065E8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LoggerTest", "src\LoggerTest\LoggerTest.csproj", "{49821876-8EEB-4B45-A823-7DA8B22065E8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimpleConv2D", "src\SimpleConv2D\SimpleConv2D.csproj", "{F9DF6A9B-2632-4D86-93D0-302EC17F9EFA}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -57,6 +59,10 @@ Global
 		{49821876-8EEB-4B45-A823-7DA8B22065E8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{49821876-8EEB-4B45-A823-7DA8B22065E8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{49821876-8EEB-4B45-A823-7DA8B22065E8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F9DF6A9B-2632-4D86-93D0-302EC17F9EFA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F9DF6A9B-2632-4D86-93D0-302EC17F9EFA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F9DF6A9B-2632-4D86-93D0-302EC17F9EFA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F9DF6A9B-2632-4D86-93D0-302EC17F9EFA}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -69,6 +75,7 @@ Global
 		{9724511A-3424-4903-9995-E0B7CCBFE72D} = {F16916FA-80CA-42FB-9DD6-8D5661B0AE6C}
 		{75FB1A0D-8F9E-459D-9D5F-687BC2B773D4} = {F16916FA-80CA-42FB-9DD6-8D5661B0AE6C}
 		{49821876-8EEB-4B45-A823-7DA8B22065E8} = {F16916FA-80CA-42FB-9DD6-8D5661B0AE6C}
+		{F9DF6A9B-2632-4D86-93D0-302EC17F9EFA} = {F16916FA-80CA-42FB-9DD6-8D5661B0AE6C}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {39E8FE5A-10A3-424C-864A-6E0F891E2A00}
