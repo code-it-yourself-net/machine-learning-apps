@@ -35,11 +35,11 @@ internal class MnistConvNeuralNetwork(SeededRandom? random)
 
         return builder
             .AddLayer(new Conv2DLayer(
-                filters: 3, // 16,
+                filters: 32, // 16,
                 kernelSize: 3,
                 activationFunction: new Tanh4D(),
-                paramInitializer: initializer
-                //dropout: dropout
+                paramInitializer: initializer,
+                dropout: dropout
             ))
             .AddLayer(new FlattenLayer())
             .AddLayer(new DenseLayer(10, new Linear(), initializer));
@@ -105,15 +105,15 @@ internal class ProgramConv2D
 
         WriteLine("\nStart training (Convolution2D)...\n");
 
-        LearningRate learningRate = new ExponentialDecayLearningRate(0.19f, 0.05f);
-        // Optimizer optimizer = new StochasticGradientDescentMomentum(learningRate, 0.9f);
-        Optimizer optimizer = new StochasticGradientDescent(learningRate);
+        LearningRate learningRate = new ExponentialDecayLearningRate(0.01f, 0.001f);
+        Optimizer optimizer = new StochasticGradientDescentMomentum(learningRate, 0.9f);
+        //Optimizer optimizer = new StochasticGradientDescent(learningRate);
         Trainer4D trainer = new(model, optimizer, random: commonRandom, logger: logger)
         {
             Memo = "Convolution2D 241123."
         };
 
-        trainer.Fit(dataSource, EvalFunction, epochs: 1, evalEveryEpochs: 1, batchSize: 1 /*xTrain.GetLength(0)*/ /*200*/);
+        trainer.Fit(dataSource, EvalFunction, epochs: 1, evalEveryEpochs: 1, batchSize: 100 /*xTrain.GetLength(0)*/ /*200*/);
 
         ReadLine();
     }

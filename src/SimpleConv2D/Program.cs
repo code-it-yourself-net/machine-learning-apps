@@ -546,12 +546,12 @@ xTrain.DivideInPlace(std);
 Console.WriteLine($"xTrain min: {xTrain.Min()}");
 Console.WriteLine($"xTrain max: {xTrain.Max()}");
 
-float loss = Train(xTrain, oneHot, 2_000, 2411240);
+float loss = Train(xTrain, oneHot, 3_000, 2411240);
 
 Console.WriteLine($"loss: {loss}");
 Console.ReadLine();
 
-static float Train(float[,,,] xTrain, float[,] yTrain, int iterations = 2_000 /*, float learningRate = 0.01f */, int? seed = null)
+static float Train(float[,,,] xTrain, float[,] yTrain, int iterations /*, float learningRate = 0.01f */, int? seed = null)
 {
     float loss = 0;
     Random random;
@@ -574,7 +574,7 @@ static float Train(float[,,,] xTrain, float[,] yTrain, int iterations = 2_000 /*
 
     SoftmaxCrossEntropyLoss softmaxCrossEntropyLoss = new();
 
-    LearningRate learningRate = new ExponentialDecayLearningRate(0.19f, 0.05f);
+    LearningRate learningRate = new ExponentialDecayLearningRate(0.02f, 0.001f);
     Optimizer optimizer = new StochasticGradientDescentMomentum(learningRate, 0.9f);
 
     for (int i = 0; i < iterations; i++)
