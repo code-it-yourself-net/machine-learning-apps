@@ -14,7 +14,7 @@ using static MachineLearning.Typed.ArrayUtils;
 // 3 (none, vertical, and horizontal stripes) * 10 examples * 1 channel * 3 rows * 3 columns
 
 const int inputChannels = 1;
-const int examples = 45; // 60;
+const int examples = 30; // 60;
 const int outputCategories = 3; // 0, 1, 2
 
 float[,,,] xTrain = new float[examples, inputChannels, 3, 3]
@@ -128,116 +128,116 @@ float[,,,] xTrain = new float[examples, inputChannels, 3, 3]
         }
     },
 
-    // negative 
+    //// negative 
 
-    // neither vertical nor horizonta
-    {
-        {
-            { 0, 0, 0 },
-            { 0, -1, 0 },
-            { 0, 0, 0 }
-        }
-    },
-    {
-        {
-            { -1, -1, -1 },
-            { -1, -1, -1 },
-            { -1, -1, -1 }
-        }
-    },
-    {
-        {
-            { -1, 0, -1 },
-            { 0, -1, 0 },
-            { -1, 0, -1 }
-        }
-    },
-    {
-        {
-            { 0, -1, 0 },
-            { -1, -1, -1 },
-            { 0, -1, 0 },
-        }
-    },
-    {
-        {
-            { -1, 0, 0 },
-            { 0, -1, 0 },
-            { 0, 0, -1 },
-        }
-    },
-    // horizontal
-    {
-        {
-            { -1, -1, -1 },
-            { 0, 0, 0 },
-            { -1, -1, -1 }
-        }
-    },
-    {
-        {
-            { -1, -1, -1 },
-            { 0, 0, 0 },
-            { 0, 0, 0 }
-        }
-    },
-    {
-        {
-            { 0, 0, 0 },
-            { 0, 0, 0 },
-            { -1, -1, -1 }
-        }
-    },
-    {
-        {
-            { 0, 0, 0 },
-            { -1, -1, -1 },
-            { 0, 0, 0 },
-        }
-    },
-    {
-        {
-            { -1, -1, -1 },
-            { -1, -1, -1 },
-            { 0, 0, 0 },
-        }
-    },
-    // vertical
-    {
-        {
-            { -1, 0, -1 },
-            { -1, 0, -1 },
-            { -1, 0, -1 }
-        }
-    },
-    {
-        {
-            { 0, -1, 0 },
-            { 0, -1, 0 },
-            { 0, -1, 0 }
-        }
-    },
-    {
-        {
-            { -1, 0, 0 },
-            { -1, 0, 0 },
-            { -1, 0, 0 }
-        }
-    },
-    {
-        {
-            { 0, 0, -1 },
-            { 0, 0, -1 },
-            { 0, 0, -1 },
-        }
-    },
-    {
-        {
-            { 0, -1, -1 },
-            { 0, -1, -1 },
-            { 0, -1, -1 },
-        }
-    },
+    //// neither vertical nor horizonta
+    //{
+    //    {
+    //        { 0, 0, 0 },
+    //        { 0, -1, 0 },
+    //        { 0, 0, 0 }
+    //    }
+    //},
+    //{
+    //    {
+    //        { -1, -1, -1 },
+    //        { -1, -1, -1 },
+    //        { -1, -1, -1 }
+    //    }
+    //},
+    //{
+    //    {
+    //        { -1, 0, -1 },
+    //        { 0, -1, 0 },
+    //        { -1, 0, -1 }
+    //    }
+    //},
+    //{
+    //    {
+    //        { 0, -1, 0 },
+    //        { -1, -1, -1 },
+    //        { 0, -1, 0 },
+    //    }
+    //},
+    //{
+    //    {
+    //        { -1, 0, 2 },
+    //        { 0, -1, 0 },
+    //        { 2, 0, -1 },
+    //    }
+    //},
+    //// horizontal
+    //{
+    //    {
+    //        { -1, -1, -1 },
+    //        { 0, 0, 0 },
+    //        { -1, -1, -1 }
+    //    }
+    //},
+    //{
+    //    {
+    //        { -1, -1, -1 },
+    //        { 0, 0, 0 },
+    //        { 0, 0, 0 }
+    //    }
+    //},
+    //{
+    //    {
+    //        { 0, 0, 0 },
+    //        { 0, 0, 0 },
+    //        { -1, -1, -1 }
+    //    }
+    //},
+    //{
+    //    {
+    //        { 0, 0, 0 },
+    //        { -1, -1, -1 },
+    //        { 0, 0, 0 },
+    //    }
+    //},
+    //{
+    //    {
+    //        { -1, -1, -1 },
+    //        { -1, -1, -1 },
+    //        { 0, 0, 0 },
+    //    }
+    //},
+    //// vertical
+    //{
+    //    {
+    //        { -1, 0, -1 },
+    //        { -1, 0, -1 },
+    //        { -1, 0, -1 }
+    //    }
+    //},
+    //{
+    //    {
+    //        { 0, -1, 0 },
+    //        { 0, -1, 0 },
+    //        { 0, -1, 0 }
+    //    }
+    //},
+    //{
+    //    {
+    //        { -1, 0, 0 },
+    //        { -1, 0, 0 },
+    //        { -1, 0, 0 }
+    //    }
+    //},
+    //{
+    //    {
+    //        { 0, 0, -1 },
+    //        { 0, 0, -1 },
+    //        { 0, 0, -1 },
+    //    }
+    //},
+    //{
+    //    {
+    //        { 0, -1, -1 },
+    //        { 0, -1, -1 },
+    //        { 0, -1, -1 },
+    //    }
+    //},
 
     // 2
 
@@ -479,22 +479,22 @@ float[,] oneHot = new float[examples, outputCategories] {
     { 0, 0, 1 },
     { 0, 0, 1 },
     { 0, 0, 1 },
-    // negative
-    { 1, 0, 0 },
-    { 1, 0, 0 },
-    { 1, 0, 0 },
-    { 1, 0, 0 },
-    { 1, 0, 0 },
-    { 0, 1, 0 },
-    { 0, 1, 0 },
-    { 0, 1, 0 },
-    { 0, 1, 0 },
-    { 0, 1, 0 },
-    { 0, 0, 1 },
-    { 0, 0, 1 },
-    { 0, 0, 1 },
-    { 0, 0, 1 },
-    { 0, 0, 1 },
+    //// negative
+    //{ 1, 0, 0 },
+    //{ 1, 0, 0 },
+    //{ 1, 0, 0 },
+    //{ 1, 0, 0 },
+    //{ 1, 0, 0 },
+    //{ 0, 1, 0 },
+    //{ 0, 1, 0 },
+    //{ 0, 1, 0 },
+    //{ 0, 1, 0 },
+    //{ 0, 1, 0 },
+    //{ 0, 0, 1 },
+    //{ 0, 0, 1 },
+    //{ 0, 0, 1 },
+    //{ 0, 0, 1 },
+    //{ 0, 0, 1 },
     // 2
     { 1, 0, 0 },
     { 1, 0, 0 },
@@ -546,7 +546,7 @@ xTrain.DivideInPlace(std);
 Console.WriteLine($"xTrain min: {xTrain.Min()}");
 Console.WriteLine($"xTrain max: {xTrain.Max()}");
 
-float loss = Train(xTrain, oneHot, 1_000, 241124);
+float loss = Train(xTrain, oneHot, 3_000, 2411240);
 
 Console.WriteLine($"loss: {loss}");
 Console.ReadLine();
@@ -560,7 +560,7 @@ static float Train(float[,,,] xTrain, float[,] yTrain, int iterations = 2_000 /*
     else
         random = new();
 
-    const int outputChannels = 2;
+    const int outputChannels = 5;
     float[,,,] kernels = CreateRandom(inputChannels, outputChannels, 3, 3, random);
     Conv2D conv2D = new(kernels);
     Tanh4D tanh4D = new();
@@ -579,7 +579,7 @@ static float Train(float[,,,] xTrain, float[,] yTrain, int iterations = 2_000 /*
 
     for (int i = 0; i < iterations; i++)
     {
-        //(xTrain, yTrain) = PermuteData(xTrain, yTrain, random);
+        (xTrain, yTrain) = PermuteData(xTrain, yTrain, random);
 
         // Forward
 
