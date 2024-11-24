@@ -25,7 +25,7 @@ using static MachineLearning.Typed.ArrayUtils;
 namespace MnistTests;
 
 internal class MnistConvNeuralNetwork(SeededRandom? random)
-    : NeuralNetwork<float[,,,], float[,]>(new SoftmaxLogSumExpCrossEntropyLoss(), random)
+    : NeuralNetwork<float[,,,], float[,]>(new SoftmaxCrossEntropyLoss(), random)
 {
     protected override LayerBuilder<float[,]> OnAddLayers(LayerBuilder<float[,,,]> builder)
     {
@@ -113,7 +113,7 @@ internal class ProgramConv2D
             Memo = "Convolution2D 241123."
         };
 
-        trainer.Fit(dataSource, EvalFunction, epochs: 1, evalEveryEpochs: 1, batchSize: 200);
+        trainer.Fit(dataSource, EvalFunction, epochs: 1, evalEveryEpochs: 1, batchSize: 1 /*xTrain.GetLength(0)*/ /*200*/);
 
         ReadLine();
     }
@@ -171,6 +171,8 @@ internal class ProgramConv2D
         {
             for (int col = 0; col < xTestCols; col++)
             {
+                //int x = col % 28;
+                //int y = col / 28;
                 xTest4D[row, 0, col / 28, col % 28] = xTest2D[row, col];
             }
         }

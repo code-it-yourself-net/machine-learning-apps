@@ -106,7 +106,7 @@ internal class ProgramTyped
             Memo = "TYPED batch=200 seed=24111017 epochs=20."
         };
 
-        trainer.Fit(dataSource, EvalFunction, epochs: 1, evalEveryEpochs: 10, logEveryEpochs: 2, batchSize: 200);
+        trainer.Fit(dataSource, EvalFunction, epochs: 10, evalEveryEpochs: 2, logEveryEpochs: 1, batchSize: 200);
 
         ReadLine();
     }
