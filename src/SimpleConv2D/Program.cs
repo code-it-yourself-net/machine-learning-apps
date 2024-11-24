@@ -14,7 +14,7 @@ using static MachineLearning.Typed.ArrayUtils;
 // 3 (none, vertical, and horizontal stripes) * 10 examples * 1 channel * 3 rows * 3 columns
 
 const int inputChannels = 1;
-const int examples = 60;
+const int examples = 45; // 60;
 const int outputCategories = 3; // 0, 1, 2
 
 float[,,,] xTrain = new float[examples, inputChannels, 3, 3]
@@ -350,116 +350,116 @@ float[,,,] xTrain = new float[examples, inputChannels, 3, 3]
         }
     },
 
-    // negative 
+    //// negative 
 
-    // neither vertical nor horizonta
-    {
-        {
-            { 0, 0, 0 },
-            { 0, -2, 0 },
-            { 0, 0, 0 }
-        }
-    },
-    {
-        {
-            { -2, -2, -2 },
-            { -2, -2, -2 },
-            { -2, -2, -2 }
-        }
-    },
-    {
-        {
-            { -2, 0, -2 },
-            { 0, -2, 0 },
-            { -2, 0, -2 }
-        }
-    },
-    {
-        {
-            { 0, -2, 0 },
-            { -2, -2, -2 },
-            { 0, -2, 0 },
-        }
-    },
-    {
-        {
-            { -2, 0, 0 },
-            { 0, -2, 0 },
-            { 0, 0, -2 },
-        }
-    },
-    // horizontal
-    {
-        {
-            { -2, -2, -2 },
-            { 0, 0, 0 },
-            { -2, -2, -2 }
-        }
-    },
-    {
-        {
-            { -2, -2, -2 },
-            { 0, 0, 0 },
-            { 0, 0, 0 }
-        }
-    },
-    {
-        {
-            { 0, 0, 0 },
-            { 0, 0, 0 },
-            { -2, -2, -2 }
-        }
-    },
-    {
-        {
-            { 0, 0, 0 },
-            { -2, -2, -2 },
-            { 0, 0, 0 },
-        }
-    },
-    {
-        {
-            { -2, -2, -2 },
-            { -2, -2, -2 },
-            { 0, 0, 0 },
-        }
-    },
-    // vertical
-    {
-        {
-            { -2, 0, -2 },
-            { -2, 0, -2 },
-            { -2, 0, -2 }
-        }
-    },
-    {
-        {
-            { 0, -2, 0 },
-            { 0, -2, 0 },
-            { 0, -2, 0 }
-        }
-    },
-    {
-        {
-            { -2, 0, 0 },
-            { -2, 0, 0 },
-            { -2, 0, 0 }
-        }
-    },
-    {
-        {
-            { 0, 0, -2 },
-            { 0, 0, -2 },
-            { 0, 0, -2 },
-        }
-    },
-    {
-        {
-            { 0, -2, -2 },
-            { 0, -2, -2 },
-            { 0, -2, -2 },
-        }
-    },
+    //// neither vertical nor horizonta
+    //{
+    //    {
+    //        { 0, 0, 0 },
+    //        { 0, -2, 0 },
+    //        { 0, 0, 0 }
+    //    }
+    //},
+    //{
+    //    {
+    //        { -2, -2, -2 },
+    //        { -2, -2, -2 },
+    //        { -2, -2, -2 }
+    //    }
+    //},
+    //{
+    //    {
+    //        { -2, 0, -2 },
+    //        { 0, -2, 0 },
+    //        { -2, 0, -2 }
+    //    }
+    //},
+    //{
+    //    {
+    //        { 0, -2, 0 },
+    //        { -2, -2, -2 },
+    //        { 0, -2, 0 },
+    //    }
+    //},
+    //{
+    //    {
+    //        { -2, 0, 0 },
+    //        { 0, -2, 0 },
+    //        { 0, 0, -2 },
+    //    }
+    //},
+    //// horizontal
+    //{
+    //    {
+    //        { -2, -2, -2 },
+    //        { 0, 0, 0 },
+    //        { -2, -2, -2 }
+    //    }
+    //},
+    //{
+    //    {
+    //        { -2, -2, -2 },
+    //        { 0, 0, 0 },
+    //        { 0, 0, 0 }
+    //    }
+    //},
+    //{
+    //    {
+    //        { 0, 0, 0 },
+    //        { 0, 0, 0 },
+    //        { -2, -2, -2 }
+    //    }
+    //},
+    //{
+    //    {
+    //        { 0, 0, 0 },
+    //        { -2, -2, -2 },
+    //        { 0, 0, 0 },
+    //    }
+    //},
+    //{
+    //    {
+    //        { -2, -2, -2 },
+    //        { -2, -2, -2 },
+    //        { 0, 0, 0 },
+    //    }
+    //},
+    //// vertical
+    //{
+    //    {
+    //        { -2, 0, -2 },
+    //        { -2, 0, -2 },
+    //        { -2, 0, -2 }
+    //    }
+    //},
+    //{
+    //    {
+    //        { 0, -2, 0 },
+    //        { 0, -2, 0 },
+    //        { 0, -2, 0 }
+    //    }
+    //},
+    //{
+    //    {
+    //        { -2, 0, 0 },
+    //        { -2, 0, 0 },
+    //        { -2, 0, 0 }
+    //    }
+    //},
+    //{
+    //    {
+    //        { 0, 0, -2 },
+    //        { 0, 0, -2 },
+    //        { 0, 0, -2 },
+    //    }
+    //},
+    //{
+    //    {
+    //        { 0, -2, -2 },
+    //        { 0, -2, -2 },
+    //        { 0, -2, -2 },
+    //    }
+    //},
 };
 
 // Values - 0 for unknown, 1 for horizontal stripes, 2 for vertical stripes
@@ -511,25 +511,42 @@ float[,] oneHot = new float[examples, outputCategories] {
     { 0, 0, 1 },
     { 0, 0, 1 },
     { 0, 0, 1 },
-    // negative
-    { 1, 0, 0 },
-    { 1, 0, 0 },
-    { 1, 0, 0 },
-    { 1, 0, 0 },
-    { 1, 0, 0 },
-    { 0, 1, 0 },
-    { 0, 1, 0 },
-    { 0, 1, 0 },
-    { 0, 1, 0 },
-    { 0, 1, 0 },
-    { 0, 0, 1 },
-    { 0, 0, 1 },
-    { 0, 0, 1 },
-    { 0, 0, 1 },
-    { 0, 0, 1 },
+    //// negative
+    //{ 1, 0, 0 },
+    //{ 1, 0, 0 },
+    //{ 1, 0, 0 },
+    //{ 1, 0, 0 },
+    //{ 1, 0, 0 },
+    //{ 0, 1, 0 },
+    //{ 0, 1, 0 },
+    //{ 0, 1, 0 },
+    //{ 0, 1, 0 },
+    //{ 0, 1, 0 },
+    //{ 0, 0, 1 },
+    //{ 0, 0, 1 },
+    //{ 0, 0, 1 },
+    //{ 0, 0, 1 },
+    //{ 0, 0, 1 },
 };
 
-float loss = Train(xTrain, oneHot, 1_000, 1241123);
+// Scale xTrain and xTest to mean 0, variance 1
+Console.WriteLine("Scale data to mean 0...");
+
+float mean = xTrain.Mean();
+xTrain.AddInPlace(-mean);
+
+Console.WriteLine($"xTrain min: {xTrain.Min()}");
+Console.WriteLine($"xTrain max: {xTrain.Max()}");
+
+Console.WriteLine("\nScale data to variance 1...");
+
+float std = xTrain.Std();
+xTrain.DivideInPlace(std);
+
+Console.WriteLine($"xTrain min: {xTrain.Min()}");
+Console.WriteLine($"xTrain max: {xTrain.Max()}");
+
+float loss = Train(xTrain, oneHot, 1_000, 241124);
 
 Console.WriteLine($"loss: {loss}");
 Console.ReadLine();
@@ -543,7 +560,7 @@ static float Train(float[,,,] xTrain, float[,] yTrain, int iterations = 2_000 /*
     else
         random = new();
 
-    const int outputChannels = 4;
+    const int outputChannels = 2;
     float[,,,] kernels = CreateRandom(inputChannels, outputChannels, 3, 3, random);
     Conv2D conv2D = new(kernels);
     Tanh4D tanh4D = new();
@@ -562,7 +579,7 @@ static float Train(float[,,,] xTrain, float[,] yTrain, int iterations = 2_000 /*
 
     for (int i = 0; i < iterations; i++)
     {
-        (xTrain, yTrain) = PermuteData(xTrain, yTrain, random);
+        //(xTrain, yTrain) = PermuteData(xTrain, yTrain, random);
 
         // Forward
 
