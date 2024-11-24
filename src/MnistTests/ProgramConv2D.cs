@@ -113,7 +113,7 @@ internal class ProgramConv2D
             Memo = "Convolution2D 241123."
         };
 
-        trainer.Fit(dataSource, EvalFunction, epochs: 1, evalEveryEpochs: 1, batchSize: 100 /*xTrain.GetLength(0)*/ /*200*/);
+        trainer.Fit(dataSource, EvalFunction, epochs: 3, evalEveryEpochs: 1, batchSize: 200);
 
         ReadLine();
     }
